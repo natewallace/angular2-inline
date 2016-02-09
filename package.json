@@ -1,0 +1,41 @@
+{
+	"name": "language-vscode-javascript-angular2",
+	"description": "Visual Studio Code language extension for javascript files that use Angular2.",
+	"version": "0.0.1",
+	"publisher": "nwallace",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iservices/language-vscode-javascript-angular2.git"
+  },
+	"engines": {
+		"vscode": "^0.10.1"
+	},
+  "icon": "images/icon.png",
+  "galleryBanner": {
+		"color": "#99C3D7"
+	},
+	"categories": [
+		"Languages"
+	],
+  "extensionDependencies": [
+    "javascript"
+  ],
+	"contributes": {
+    "languages": [{
+      "id": "javascript",
+      "aliases": [
+        "JavaScript (Angular2)"
+      ],
+      "extensions": [".js", ".es6"],
+      "mimetypes": [
+        "text/javascript"
+			]
+    }],
+		"grammars": [{
+			"language": "javascript",
+			"scopeName": "source.js.angular2",
+			"path": "./syntaxes/javascriptAngular2.tmLanguage"
+		}]
+	}
+}
