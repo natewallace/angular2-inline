@@ -105,6 +105,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#object-member-ng-template</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#object-member</string>
 				</dict>
 				<dict>
@@ -326,10 +330,6 @@
 				<dict>
 					<key>include</key>
 					<string>#regex</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#template-ng</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1094,6 +1094,26 @@
 			<key>name</key>
 			<string>meta.object.heritage.parent.ts</string>
 		</dict>
+		<key>object-member-ng-template</key>
+		<dict>
+			<key>begin</key>
+			<string>template\s*:</string>
+			<key>end</key>
+			<string>(?=,|\})</string>
+			<key>name</key>
+			<string>meta.object.member.js</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#template-ng</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
 		<key>object-member</key>
 		<dict>
 			<key>begin</key>
@@ -1407,7 +1427,7 @@
 		<key>template-ng</key>
 		<dict>
 			<key>begin</key>
-			<string>\(`</string>
+			<string>`|\(`</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -1417,7 +1437,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>`\)</string>
+			<string>`\)|`</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
