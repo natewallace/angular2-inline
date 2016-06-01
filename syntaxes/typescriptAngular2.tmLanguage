@@ -1708,7 +1708,7 @@
 			<key>match</key>
 			<string>(?x)
   \s*
-  ([_$a-zA-Z*#(\[][-$.\w)\]]*)
+  ([_$a-zA-Z*#(\[][-$.\w()\[\]]*)
   (?=\s|=|/?&gt;|/\*|//)</string>
 			<key>name</key>
 			<string>meta.tag.attribute-name.tsx</string>
