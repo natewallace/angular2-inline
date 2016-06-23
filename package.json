@@ -1,7 +1,7 @@
 {
 	"name": "language-vscode-javascript-angular2",
 	"description": "Visual Studio Code language extension for javascript/typescript files that use Angular2.",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"publisher": "nwallace",
   "license": "UNLICENSED",
   "repository": {
@@ -9,7 +9,7 @@
     "url": "https://github.com/iservices/language-vscode-javascript-angular2.git"
   },
 	"engines": {
-		"vscode": "^0.10.1"
+		"vscode": "^1.2.1"
 	},
   "icon": "images/icon.png",
   "galleryBanner": {
@@ -23,33 +23,10 @@
     "typescript"
   ],
 	"contributes": {
-    "languages": [{
-      "id": "javascript",
-      "aliases": [
-        "JavaScript (Angular2)"
-      ],
-      "extensions": [".js", ".es6"],
-      "mimetypes": [
-        "text/javascript"
-			]
-    }, {
-      "id": "typescript",
-      "aliases": [
-        "TypeScript (Angular2)"
-      ],
-      "extensions": [".ts"],
-      "mimetypes": [
-        "text/typescript"
-			]
-    }],
 		"grammars": [{
-			"language": "javascript",
-			"scopeName": "source.js.angular2",
-			"path": "./syntaxes/javascriptAngular2.tmLanguage"
-		}, {
-			"language": "typescript",
-			"scopeName": "source.ts.angular2",
-			"path": "./syntaxes/typescriptAngular2.tmLanguage"
+			"scopeName": "template.ng",
+			"path": "./syntaxes/template.ng.json",
+      "injectTo": ["source.js", "source.ts"]
 		}]
 	}
 }
