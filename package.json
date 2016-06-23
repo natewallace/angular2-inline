@@ -23,10 +23,17 @@
     "typescript"
   ],
 	"contributes": {
-		"grammars": [{
-			"scopeName": "template.ng",
-			"path": "./syntaxes/template.ng.json",
-      "injectTo": ["source.js", "source.ts"]
-		}]
+		"grammars": [
+      {
+        "scopeName": "template.ng",
+        "path": "./syntaxes/template.ng.json",
+        "injectTo": ["source.js", "source.ts"]
+		  },
+      {
+        "scopeName": "styles.ng",
+        "path": "./syntaxes/styles.ng.json",
+        "injectTo": ["source.js", "source.ts"]
+      }
+    ]
 	}
 }

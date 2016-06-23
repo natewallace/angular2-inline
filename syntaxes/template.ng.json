@@ -16,6 +16,9 @@
 			"patterns": [
 				{
 					"include": "#template-ng"
+				},
+				{
+					"include": "source.ts"
 				}
 			]
 		},
