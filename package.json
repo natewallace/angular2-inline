@@ -1,7 +1,7 @@
 {
 	"name": "language-vscode-javascript-angular2",
 	"description": "Visual Studio Code language extension for javascript/typescript files that use Angular2.",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"publisher": "nwallace",
   "license": "UNLICENSED",
   "repository": {

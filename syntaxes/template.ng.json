@@ -39,7 +39,43 @@
 			"name": "meta.template",
 			"patterns": [
 				{
+					"include": "#ng-style"
+				},
+				{
 					"include": "#ng"
+				}
+			]
+		},
+
+		"ng-style": {
+			"begin": "(<)([Ss][Tt][Yy][Ll][Ee])(>)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.begin"
+				},
+				"2": {
+					"name": "entity.name.tag"
+				},
+				"3": {
+					"name": "punctuation.definition.tag.end"
+				}
+			},
+			"end": "(</)([Ss][Tt][Yy][Ll][Ee])(>)",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.begin"
+				},
+				"2": {
+					"name": "entity.name.tag"
+				},
+				"3": {
+					"name": "punctuation.definition.tag.end"
+				}
+			},
+			"name": "ng-style",
+			"patterns": [
+				{
+					"include": "source.css"
 				}
 			]
 		},
