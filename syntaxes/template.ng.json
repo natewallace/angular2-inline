@@ -153,16 +153,58 @@
 		},
 
 		"ng-evaluated-code": {
-			"begin": "{",
+			"begin": "{{",
 			"beginCaptures": {
 				"0": {
 					"name": "punctuation.definition.brace.curly.start"
 				}
 			},
-			"end": "}",
+			"end": "}}",
 			"endCaptures": {
 				"0": {
 					"name": "punctuation.definition.brace.curly.end"
+				}
+			},
+			"name": "meta.brace.curly",
+			"patterns": [
+				{
+					"include": "source.ts"
+				}
+			]
+		},
+
+		"ng-evaluated-code-attribute-double": {
+			"begin": "(?<=\\]=|\\)=)\"",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin"
+				}
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end"
+				}
+			},
+			"name": "meta.brace.curly",
+			"patterns": [
+				{
+					"include": "source.ts"
+				}
+			]
+		},
+
+		"ng-evaluated-code-attribute-single": {
+			"begin": "(?<=\\]=|\\)=)'",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin"
+				}
+			},
+			"end": "'",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end"
 				}
 			},
 			"name": "meta.brace.curly",
@@ -239,13 +281,16 @@
 					"include": "#ng-tag-attribute-assignment"
 				},
 				{
+					"include": "#ng-evaluated-code-attribute-single"
+				},
+				{
+					"include": "#ng-evaluated-code-attribute-double"
+				},
+				{
 					"include": "#ng-string-double-quoted"
 				},
 				{
 					"include": "#ng-string-single-quoted"
-				},
-				{
-					"include": "#ng-evaluated-code"
 				}
 			]
 		},
