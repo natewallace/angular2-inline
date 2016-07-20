@@ -39,7 +39,7 @@
 			"name": "meta.template",
 			"patterns": [
 				{
-					"include": "#ng-style"
+					"include": "#comment-block"
 				},
 				{
 					"include": "#ng"
@@ -84,6 +84,9 @@
 			"name": "meta.ng",
 			"patterns": [
 				{
+					"include": "#ng-tag-comment"
+				},
+				{
 					"include": "#ng-tag-without-attributes"
 				},
 				{
@@ -111,6 +114,9 @@
 		"ng-children": {
 			"patterns": [
 				{
+					"include": "#ng-tag-comment"
+				},
+				{
 					"include": "#ng-tag-without-attributes"
 				},
 				{
@@ -129,6 +135,12 @@
 					"include": "#ng-entities"
 				}
 			]
+		},
+
+		"ng-tag-comment": {
+			"begin": "<!--",
+			"end": "-->",
+			"name": "comment.block"
 		},
 
 		"ng-entities": {
