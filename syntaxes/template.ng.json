@@ -42,6 +42,9 @@
 					"include": "#comment-block"
 				},
 				{
+ 					"include": "#ng-style"
+  			},
+				{
 					"include": "#ng"
 				}
 			]
