@@ -283,7 +283,7 @@
 					"name": "entity.other.attribute-name"
 				}
 			},
-			"match": "(?x)\\s*([_$a-zA-Z*#(\\[][-$.\\w()\\[\\]]*)(?=\\s|=|/?>|/\\*|//)",
+			"match": "(?x)\\s*([_$a-zA-Z*#(\\[][-$.:\\w()\\[\\]]*)(?=\\s|=|/?>|/\\*|//)",
 			"name": "meta.tag.attribute-name"
 		},		
 
