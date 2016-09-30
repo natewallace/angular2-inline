@@ -45,7 +45,7 @@
  					"include": "#ng-style"
   			},
 				{
-					"include": "#ng"
+					"include": "#ng-children"
 				}
 			]
 		},
@@ -83,44 +83,10 @@
 			]
 		},
 
-		"ng": {
-			"name": "meta.ng",
-			"patterns": [
-				{
-					"include": "#ng-tag-comment"
-				},
-				{
-					"include": "#ng-tag-without-attributes"
-				},
-				{
-					"include": "#ng-tag-open"
-				},
-				{
-					"include": "#ng-tag-close"
-				},
-				{
-					"include": "#ng-tag-invalid"
-				},
-				{
-					"begin": "(?<=(?:'|\"|})>)",
-					"end": "(?=</)",
-					"name": "meta.ng.children",
-					"patterns": [
-						{
-							"include": "#ng-children"
-						}
-					]
-				}
-			]
-		},
-
 		"ng-children": {
 			"patterns": [
 				{
 					"include": "#ng-tag-comment"
-				},
-				{
-					"include": "#ng-tag-without-attributes"
 				},
 				{
 					"include": "#ng-tag-open"
@@ -340,7 +306,7 @@
 		},
 
 		"ng-tag-open": {
-			"begin": "(?x)(<)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))(?=\\s+(?!\\?)|/?>)",
+			"begin": "(?x)(<)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))(?=\\s*(?!\\?)|/?>)",
 			"beginCaptures": {
 				"1": {
 					"name": "punctuation.definition.tag.begin"
@@ -362,39 +328,6 @@
 				},
 				{
 					"include": "#ng-tag-attributes-illegal"
-				}
-			]
-		},
-
-		"ng-tag-without-attributes": {
-			"begin": "(<)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))(>)",
-			"beginCaptures": {
-				"1": {
-					"name": "punctuation.definition.begin"
-				},
-				"2": {
-					"name": "entity.name.tag"
-				},
-				"3": {
-					"name": "punctuation.definition.tag.end"
-				}
-			},
-			"end": "(</)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))(>)",
-			"endCaptures": {
-				"1": {
-					"name": "punctuation.definition.tag.begin"
-				},
-				"2": {
-					"name": "entity.name.tag"
-				},
-				"3": {
-					"name": "punctuation.definition.tag.end"
-				}
-			},
-			"name": "tag.without-attributes",
-			"patterns": [
-				{
-					"include": "#ng-children"
 				}
 			]
 		}
