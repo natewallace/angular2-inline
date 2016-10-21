@@ -1,6 +1,6 @@
 {
 	"fileTypes": [],
-	"injectionSelector": "L:meta.block",
+	"injectionSelector": "L:meta.objectliteral",
 	"name": "object-member-ng-template",
 	"patterns": [
 		{
