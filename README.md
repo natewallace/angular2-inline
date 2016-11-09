@@ -1,4 +1,7 @@
-## language-vscode-javascript-angular2
+## angular2-inline
+
+*This extension replaces the language-vscode-javascript-angular2 extension.*
+
 This package is a language extension for Microsoft Visual Studio Code.  It extends the javascript and
 typescript colorizers to add Angular2 specific highlighting for inline templates and stylesheets.
 

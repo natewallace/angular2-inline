@@ -1,12 +1,12 @@
 {
-	"name": "language-vscode-javascript-angular2",
+	"name": "angular2-inline",
 	"description": "Visual Studio Code language extension for javascript/typescript files that use Angular2.",
-	"version": "0.0.12",
-	"publisher": "nwallace",
+	"version": "0.0.13",
+	"publisher": "natewallace",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iservices/language-vscode-javascript-angular2.git"
+    "url": "https://github.com/natewallace/angular2-inline.git"
   },
 	"engines": {
 		"vscode": "^1.2.1"
