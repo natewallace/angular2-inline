@@ -18,10 +18,6 @@
 	"categories": [
 		"Languages"
 	],
-  "extensionDependencies": [
-    "javascript",
-    "typescript"
-  ],
 	"contributes": {
 		"grammars": [
       {
