@@ -1,35 +1,49 @@
 {
-	"name": "angular2-inline",
-	"description": "Visual Studio Code language extension for javascript/typescript files that use Angular2.",
-	"version": "0.0.14",
-	"publisher": "natewallace",
+  "name": "angular2-inline",
+  "description": "Visual Studio Code language extension for javascript/typescript files that use Angular2.",
+  "version": "0.0.14",
+  "publisher": "natewallace",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "https://github.com/natewallace/angular2-inline.git"
   },
-	"engines": {
-		"vscode": "^1.2.1"
-	},
+  "engines": {
+    "vscode": "^1.7.1"
+  },
   "icon": "images/icon.png",
   "galleryBanner": {
-		"color": "#99C3D7"
-	},
-	"categories": [
-		"Languages"
-	],
-	"contributes": {
-		"grammars": [
+    "color": "#99C3D7"
+  },
+  "categories": [
+    "Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:javascript"
+  ],
+  "main": "./src/main",
+  "contributes": {
+    "grammars": [
       {
         "scopeName": "template.ng",
         "path": "./syntaxes/template.ng.json",
-        "injectTo": ["source.js", "source.ts"]
-		  },
+        "injectTo": [
+          "source.js",
+          "source.ts"
+        ]
+      },
       {
         "scopeName": "styles.ng",
         "path": "./syntaxes/styles.ng.json",
-        "injectTo": ["source.js", "source.ts"]
+        "injectTo": [
+          "source.js",
+          "source.ts"
+        ]
       }
     ]
-	}
+  },
+  "dependencies": {
+    "htmlparser2": "^3.9.2"
+  }
 }
