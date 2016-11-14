@@ -22,7 +22,7 @@ function parseForElement(text, pos) {
                 endIndex: parser.endIndex
             };
             // position inside element
-            if (pos > e.startIndex && pos < e.endIndex) {
+            if (pos > e.startIndex && pos <= e.endIndex) {
                 element = e;
                 element.isInside = true;
                 parser.reset();

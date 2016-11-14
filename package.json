@@ -44,6 +44,10 @@
       {
         "scopeName": "source.ng.ts",
         "path": "./syntaxes/source.ng.ts.json"
+      },
+      {
+        "scopeName": "source.ng.css",
+        "path": "./syntaxes/source.ng.css.json"
       }
     ]
   },

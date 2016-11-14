@@ -39,16 +39,35 @@
 			"name": "meta.template",
 			"patterns": [
 				{
+					"include": "#template-substitution-element"
+				},
+				{
 					"include": "#comment-block"
 				},
 				{
  					"include": "#ng-style"
-  			},
+  				},
 				{
 					"include": "#ng-children"
 				}
 			]
 		},
+
+		"template-substitution-element": {
+			"name": "meta.template.expression.ts",
+			"begin": "\\$\\{",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.template-expression.begin.ts"
+				}
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.template-expression.end.ts"
+				}
+			}
+		},		
 
 		"ng-style": {
 			"begin": "(<)([Ss][Tt][Yy][Ll][Ee])(>)",
@@ -78,13 +97,16 @@
 			"name": "ng-style",
 			"patterns": [
 				{
-					"include": "source.css"
+					"include": "source.ng.css"
 				}
 			]
 		},
 
 		"ng-children": {
 			"patterns": [
+				{
+					"include": "#template-substitution-element"
+				},
 				{
 					"include": "#ng-tag-comment"
 				},
@@ -212,6 +234,9 @@
 			"name": "string.quoted.double",
 			"patterns": [
 				{
+					"include": "#template-substitution-element"
+				},
+				{
 					"include": "#ng-entities"
 				}
 			]
@@ -232,6 +257,9 @@
 			},
 			"name": "string.quoted.single",
 			"patterns": [
+				{
+					"include": "#template-substitution-element"
+				},
 				{
 					"include": "#ng-entities"
 				}
