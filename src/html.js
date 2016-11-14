@@ -39,7 +39,7 @@ function parseForElement(text, pos) {
         onclosetag: function(name) {
             if (elementStack.length > 0 && elementStack[elementStack.length - 1].name === name) {
                 elementStack.splice(elementStack.length - 1);
-                if (elementStack.length === 0) {
+                if (elementStack.length === 0 && pos > parser.endIndex) {
                     element = null;
                 } else if (pos > parser.endIndex && elementStack.length > 0) {
                     element = elementStack[elementStack.length - 1];
