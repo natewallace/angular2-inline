@@ -386,8 +386,6 @@ const valueSets = {
             newValue('toolbar'), newValue('banner'), newValue('complementary'), newValue('contentinfo'), newValue('form'), newValue('main'), newValue('navigation'), newValue('region'), newValue('search')]
 };
 
-
-
 /**
  * Get all defined tags.
  * 
@@ -412,14 +410,77 @@ module.exports.getTag = function getTag(name) {
  * Get all of the attributes for the given tag.
  * 
  * @param {string} tagName - The name of the tag to get attributes for.
+ * @param {string} openCharacters - Characters that appear at the beginning of the attribute name.
+ * @param {string} closeCharacters - Characters that appear at the end of the attribute name.
  * @return {CompletionItem[]} - The attributes for the given tag.  Even if the tag specified isn't found the global attributes will be returned.
  */
-module.exports.getAttributes = function getAttributes(tagName) {
+module.exports.getAttributes = function getAttributes(tagName, openCharacters, closeCharacters) {
+    let result = null;
     const tag = module.exports.getTag(tagName);
     if (!tag) {
-        return globalAttributes;
+        result = globalAttributes;
     }
-    return tag.attributes.concat(globalAttributes);
+    result = tag.attributes.concat(globalAttributes);
+
+    let nameClose = '';
+    let moveLeft = 0;
+    const oc = openCharacters ? openCharacters : '';
+    const cc = closeCharacters ? closeCharacters : '';
+
+    const hasAssign = cc.length && cc[cc.length - 1] === '=';
+    if (hasAssign) {
+        nameClose = '';
+        moveLeft = 0;
+    } else {
+        const bindOpenRegExp = /\[|\(/;
+        const bindCloseRegExp = /\]|\)/;
+
+        // get open bind characters
+        let bindoc = '';
+        const bindoc0 = oc.length > 0 ? oc[0] : '';
+        const bindoc1 = oc.length > 1 ? oc[1] : '';
+        bindoc += bindOpenRegExp.test(bindoc0) ? bindoc0 : '';
+        bindoc += bindOpenRegExp.test(bindoc1) ? bindoc1 : '';
+
+        // get closing bind characters
+        let bindcc = '';
+        const bindcc0 = cc.length > 0 ? cc[0] : '';
+        const bindcc1 = cc.length > 1 ? cc[1] : '';
+        bindcc += bindCloseRegExp.test(bindcc0) ? bindcc0 : '';
+        bindcc += bindCloseRegExp.test(bindcc1) ? bindcc1 : '';
+
+        // complete binding and assignment
+        if (bindcc === '') {
+            switch (bindoc) {
+                case '[':
+                    nameClose = ']=""';
+                    break;
+                case '[(':
+                    nameClose = ')]=""';
+                    break;
+                case '(':
+                    nameClose = ')=""';
+                    break;
+                case '([':
+                    nameClose = '])=""';
+                    break;
+                default:
+                    nameClose = '=""';
+                    break;
+            }
+            moveLeft = 1;
+        } else {
+            nameClose = '';
+            moveLeft = -1 * bindcc.length;
+        }
+    }
+    
+    for (let i = 0; i < result.length; i++) {
+        result[i].insertText = result[i].label + nameClose;
+        result[i].command.arguments[0].value = moveLeft;
+    }
+
+    return result;
 }
 
 /**
@@ -448,7 +509,7 @@ module.exports.getAttribute = function getAttribute(tagName, attributeName) {
  * @param {string} attributeName - The name of the attribute to get the valid values for.
  * @return {CompletionItem} - The valid values for the specified attribute or an empty array if the tag or attribute isn't defined or all values are valid.
  */
-module.exports.getAttributeValues = function getAttributeValues(tagName, attributeName) {    
+module.exports.getAttributeValues = function getAttributeValues(tagName, attributeName) {
     const attribute = module.exports.getAttribute(tagName, attributeName);
     if (!attribute || !attribute.valueType || !valueSets[attribute.valueType]) {
         return [];

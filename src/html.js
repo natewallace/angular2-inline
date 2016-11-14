@@ -93,14 +93,72 @@ function parseForAttribute(element, text, pos) {
  *                    found before reaching the beginning of the text, null will be returned.
  */
 function firstNonNameCharacter(text, pos) {
-    const nonNameRegExp = /[A-Za-z0-9_-]/;
+    const nameRegExp = /[_$@a-zA-Z*#()\[\]]/;
     for (let i = pos - 1; i >= 0; i--) {
-        if (!nonNameRegExp.test(text[i])) {
+        if (!nameRegExp.test(text[i])) {
             return text[i];
         }
     }
 
     return null;
+}
+
+/**
+ * Get the opening characters that appear before an attribute name if there are any.
+ * 
+ * @param {string} text - The full text that the cursor appears in.
+ * @param {number} pos - The current zero based cursor position within the text parameter to start the search from.
+ * @return {string} - The opening characters found or an empty string if non are present.  The possible return values are: '[', '[(', '(', '([', '' 
+ */
+function getOpenAttributeCharacters(text, pos) {
+    const spaceRegExp = /\s/;
+    const openRegExp = /\[|\(/;
+    for (let i = pos - 1; i >= 0; i--) {
+        if (spaceRegExp.test(text[i])) {
+            const part0 = (i + 1 < text.length) ? text[i + 1] : '';
+            const part1 = (i + 2 < text.length) ? text[i + 2] : '';
+            return (openRegExp.test(part0) ? part0 : '') +
+                   (openRegExp.test(part1) ? part1 : '')
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Get the closing characters that appear after an attribute name if there are any.
+ * 
+ * @param {string} text - The full text that the cursor appears in.
+ * @param {number} pos - The current zero based cursor position within the text parameter to start the search from.
+ * @return {string} - The closing characters found or an empty string if non are present.  The possible return values are:
+ *                    ']', ')]', ')', '])', ']<optional spaces>=', ')]<optional spaces>=', ')<optional spaces>=', '])<optional spaces>=', ''
+ */
+function getCloseAttributeCharacters(text, pos) {
+    const nameRegExp = /[_$@a-zA-Z*#]/;
+    const whitespaceRegExp = /[\s]/;
+    let closeRegExp = /\]|\)/;
+    let result = '';
+    for (let i = pos; i < text.length; i++) {
+        if (!nameRegExp.test(text[i])) {
+            for (let j = i; j < text.length; j++) {
+                if (closeRegExp && closeRegExp.test(text[j])) {
+                    result += text[j];
+                } else if (whitespaceRegExp.test(text[j])) {
+                    closeRegExp = null;
+                    result += text[j];
+                } else if (text[j] === '=') {
+                    result += '=';
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            return result.trim();
+        }
+    }
+
+    return '';
 }
 
 /**
@@ -131,11 +189,13 @@ module.exports.createCompletions = function createCompletions(text, pos) {
         return spec.empty;
     }
 
-    const elementAttribute = parseForAttribute(element, text, pos);    
+    const elementAttribute = parseForAttribute(element, text, pos);
+    const openCharacters = getOpenAttributeCharacters(text, pos);
+    const closeCharacters = getCloseAttributeCharacters(text, pos);
 
     // return all attributes for element if there is no current attribute or we are not inside the value portion of an attribute
     if (!elementAttribute || !elementAttribute.isInsideValue) {
-        return spec.getAttributes(element.name);
+        return spec.getAttributes(element.name, openCharacters, closeCharacters);
     }
 
     // return valid values for attribute we are inside
