@@ -18,7 +18,7 @@
 					"include": "#template-ng"
 				},
 				{
-					"include": "source.ts"
+					"include": "source.ng.ts"
 				}
 			]
 		},
@@ -149,7 +149,7 @@
 			"name": "meta.brace.curly",
 			"patterns": [
 				{
-					"include": "source.ts"
+					"include": "source.ng.ts"
 				}
 			]
 		},
@@ -170,7 +170,7 @@
 			"name": "meta.brace.curly",
 			"patterns": [
 				{
-					"include": "source.ts"
+					"include": "source.ng.ts"
 				}
 			]
 		},
@@ -191,7 +191,7 @@
 			"name": "meta.brace.curly",
 			"patterns": [
 				{
-					"include": "source.ts"
+					"include": "source.ng.ts"
 				}
 			]
 		},

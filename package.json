@@ -40,10 +40,14 @@
           "source.js",
           "source.ts"
         ]
+      },
+      {
+        "scopeName": "source.ng.ts",
+        "path": "./syntaxes/source.ng.ts.json"
       }
     ]
   },
   "dependencies": {
-    "htmlparser2": "^3.9.2"
+    "htmlparser2": "3.9.2"
   }
 }
