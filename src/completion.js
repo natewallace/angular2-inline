@@ -1,7 +1,7 @@
 'use strict';
 
 const vscode = require('vscode');
-const html = require('./html');
+const html = require('./htmlCompletion');
 
 /**
  * Class used for code completion that implements CompletionItemProvider.

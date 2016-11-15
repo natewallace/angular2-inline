@@ -1,3 +1,13 @@
+/*---------------------------------------------------------------------------------------------
+ * Some of this code has been taken from the https://github.com/Microsoft/vscode-html-languageservice/ project
+ * and modified to work within this project.  The original license header is included below.
+ *--------------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 'use strict';
 
 const vscode = require('vscode');
@@ -531,4 +541,31 @@ module.exports.newCloseTag = function newCloseTag(name) {
     const closeTag = new vscode.CompletionItem('/' + name, vscode.CompletionItemKind.Property);
     closeTag.insertText = '/' + name + '>';
     return closeTag;
+}
+
+/**
+ * Check if the given tag is an empty tag that has no content.
+ * 
+ * @param {string} name - The name of the tag.
+ * @return {bool} - true if the givne tag is an empty tag, false if it isn't.
+ */
+module.exports.isEmptyTag = function isEmptyTag(name) {
+    switch (name.toLowerCase()) {
+        case 'area':
+        case 'base':
+        case 'br':
+        case 'col':
+        case 'hr':
+        case 'img':
+        case 'input':
+        case 'link':
+        case 'meta':
+        case 'param':
+        case 'command':
+        case 'keygen':
+        case 'source':
+            return true;
+        default:
+            false;
+    }
 }

@@ -1,13 +1,3 @@
-/*---------------------------------------------------------------------------------------------
- * Some of this code has been taken from the https://github.com/Microsoft/vscode-html-languageservice/ project
- * and modified to work within this project.  The original license header is included below.
- *--------------------------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
 'use strict';
 
 const spec = require('./htmlSpec');
@@ -77,25 +67,7 @@ function parseForElement(text, pos) {
                 done = pos <= scanner.getTokenOffset();
                 if (!done && element) {
                     element.endTagOffset = scanner.getTokenOffset();                    
-                    switch (element.name.toLowerCase()) {
-                        case 'area':
-                        case 'base':
-                        case 'br':
-                        case 'col':
-                        case 'hr':
-                        case 'img':
-                        case 'input':
-                        case 'link':
-                        case 'meta':
-                        case 'param':
-                        case 'command':
-                        case 'keygen':
-                        case 'source':
-                            pop = true;
-                            break;
-                        default:
-                            break;
-                    }
+                    pop = spec.isEmptyTag(element.name);
                 }
                 break;        
 
