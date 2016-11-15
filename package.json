@@ -50,8 +50,5 @@
         "path": "./syntaxes/source.ng.css.json"
       }
     ]
-  },
-  "dependencies": {
-    "htmlparser2": "3.9.2"
   }
 }

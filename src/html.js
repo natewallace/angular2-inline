@@ -1,87 +1,144 @@
-const htmlparser = require('htmlparser2');
+/*---------------------------------------------------------------------------------------------
+ * Some of this code has been taken from the https://github.com/Microsoft/vscode-html-languageservice/ project
+ * and modified to work within this project.  The original license header is included below.
+ *--------------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+'use strict';
+
 const spec = require('./htmlSpec');
+const Html = require('./htmlScanner'); 
 
 /**
  * Parse the given text to get the open element that contains or preceeds the cursor position.
  * 
  * @param {string} text - The html text to parse.
  * @param {number} pos - The current zero based cursor position relative to the text parameter.
- * @return {object} - An object that describes the parsed element with the following properties: name, startIndex, endIndex, isInside.
- *                    If the cursor doesn't have an associated element null will be returned.
+ * @return {object} - An object that describes the parsed element.
  */
 function parseForElement(text, pos) {
+    const scanner = Html.createScanner(text);
     const elementStack = [];
     let element = null;
+    let attributeName = null;
+    let done = false;
+    let pop = false;
 
-    const parser = new htmlparser.Parser({
-        // put open element on stack
-        onopentag: function (name, attribs) {
-            const e = {
-                name: name,
-                startIndex: parser.startIndex,
-                endIndex: parser.endIndex
-            };
-            // position inside element
-            if (pos > e.startIndex && pos <= e.endIndex) {
-                element = e;
-                element.isInside = true;
-                parser.reset();
-            // position after element
-            } else if (pos > e.endIndex) {
-                element = e;
-                elementStack.push(e);
-            // position before element
-            } else {
-                parser.reset();
-            }
-        },
-        // remove closed element from stack
-        onclosetag: function(name) {
-            if (elementStack.length > 0 && elementStack[elementStack.length - 1].name === name) {
+    while (!done && scanner.scan() !== Html.TokenType.EOS) {        
+        switch (scanner.getTokenType()) {
+
+            // start tag open
+            case Html.TokenType.StartTagOpen:
+                done = pos <= scanner.getTokenOffset();
+                break;
+
+            // start tag
+            case Html.TokenType.StartTag:
+                element = {
+                    name: scanner.getTokenText(),
+                    offset: scanner.getTokenOffset(),
+                    endOffset: scanner.getTokenOffset() + scanner.getTokenLength(),
+                    attributeValues: []
+                };
+                elementStack.push(element);
+                break;
+            
+            // attribute name
+            case Html.TokenType.AttributeName:
+                attributeName = scanner.getTokenText();
+                break;
+
+            // attribute value
+            case Html.TokenType.AttributeValue:
+                if (element) {
+                    element.attributeValues.push({
+                        attributeName: attributeName,
+                        offset: scanner.getTokenOffset(),
+                        endOffset: scanner.getTokenOffset() + scanner.getTokenLength()
+                    })
+                }
+                break;
+            
+            // start tag self closed
+            case Html.TokenType.StartTagSelfClose:
+                if (element) {
+                    element.endTagOffset = scanner.getTokenOffset();
+                    done = pos <= scanner.getTokenOffset();
+                    pop = !done;
+                }            
+                break;
+
+            // start tag closed
+            case Html.TokenType.StartTagClose:
+                done = pos <= scanner.getTokenOffset();
+                if (!done && element) {
+                    element.endTagOffset = scanner.getTokenOffset();                    
+                    switch (element.name.toLowerCase()) {
+                        case 'area':
+                        case 'base':
+                        case 'br':
+                        case 'col':
+                        case 'hr':
+                        case 'img':
+                        case 'input':
+                        case 'link':
+                        case 'meta':
+                        case 'param':
+                        case 'command':
+                        case 'keygen':
+                        case 'source':
+                            pop = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;        
+
+            // end tag
+            case Html.TokenType.EndTagOpen:
+                pop = true;
+                break;     
+
+            default:
+                done = pos <= scanner.getTokenOffset();
+                break;
+        }
+
+        // remove the last added element and set top element to latest
+        if (pop) {
+            pop = false;
+            if (elementStack.length > 0) {
                 elementStack.splice(elementStack.length - 1);
-                if (elementStack.length === 0 && pos > parser.endIndex) {
-                    element = null;
-                } else if (pos > parser.endIndex && elementStack.length > 0) {
+                if (elementStack.length > 0) {
                     element = elementStack[elementStack.length - 1];
                 }
             }
         }
-    });
-    
-    parser.write(text);
-    parser.end();
-
-    return element;
-};
-
-/**
- * Parse the given element and its text to get the attribute the cursor is positioned in.
- * 
- * @param {object} element - An element object created from a call to the parseForElement function.
- * @param {string} text - The full html text the element was parsed from.
- * @param {number} pos - The current zero based cursor position relative to the text parameter.
- * @return {object} - An object that describes the parsed attributed with the following properties: attributeName, isInsideValue.
- *                    If the cursor doesn't have an associated attribute null will be returned.
- */
-function parseForAttribute(element, text, pos) {
-    if (!element) {
-        return null;
     }
-    const attributeRegExp = /\s+([^=]*)="([^"]*)"/g;
-    const tagText = text.substring(element.startIndex, element.endIndex);
-    const relPos = pos - element.startIndex;
 
-    let match = null;
-    while ((match = attributeRegExp.exec(tagText)) !== null) {
-        if (relPos > match.index && relPos < match.index + match[0].length) {
-            return {
-                attributeName: match[1].toLowerCase(),
-                isInsideValue: (relPos > (match.index + match[1].length + 2) && relPos < (match.index + match[1].length + 2 + match[2].length + 2))
-            };
+    // determine if we are inside the element, an attribute, or an attribute value
+    if (element) {
+        if (typeof element.endTagOffset === 'undefined') {
+            element.endTagOffset = text.length;
+        }
+        element.isInsideElement = pos <= element.endTagOffset;
+        element.isInsideElementName = (pos >= element.offset && pos <= element.endOffset);
+        element.isInsideAttributeValue = false;
+        element.attributeName = null;
+        for (let i = 0; i < element.attributeValues.length; i++) {
+            if (pos >= element.attributeValues[i].offset && pos <= element.attributeValues[i].endOffset) {
+                element.isInsideAttributeValue = true;
+                element.attributeName = element.attributeValues[i].attributeName;
+            }
         }
     }
 
-    return null;
+    return element;
 }
 
 /**
@@ -111,10 +168,10 @@ function firstNonNameCharacter(text, pos) {
  * @return {string} - The opening characters found or an empty string if non are present.  The possible return values are: '[', '[(', '(', '([', '' 
  */
 function getOpenAttributeCharacters(text, pos) {
-    const spaceRegExp = /\s/;
+    const termRegExp = /[\s"']/;
     const openRegExp = /\[|\(/;
     for (let i = pos - 1; i >= 0; i--) {
-        if (spaceRegExp.test(text[i])) {
+        if (termRegExp.test(text[i])) {
             const part0 = (i + 1 < text.length) ? text[i + 1] : '';
             const part1 = (i + 2 < text.length) ? text[i + 2] : '';
             return (openRegExp.test(part0) ? part0 : '') +
@@ -172,7 +229,7 @@ module.exports.createCompletions = function createCompletions(text, pos) {
     const element = parseForElement(text, pos);        
 
     // return all tags if we are not following an element
-    if (!element) {
+    if (!element || element.isInsideElementName) {
         if (firstNonNameCharacter(text, pos) === '<') {
             return spec.getTags();
         }
@@ -181,23 +238,23 @@ module.exports.createCompletions = function createCompletions(text, pos) {
     }
 
     // return all tags plus closing tag if following an element but not inside of it
-    if (!element.isInside) {
+    if (!element.isInsideElement) {
         if (firstNonNameCharacter(text, pos) === '<') {
             return [spec.newCloseTag(element.name)].concat(spec.getTags());
         }
 
-        return spec.empty;
+        return [];
     }
 
-    const elementAttribute = parseForAttribute(element, text, pos);
+    // const elementAttribute = parseForAttribute(element, text, pos);
     const openCharacters = getOpenAttributeCharacters(text, pos);
     const closeCharacters = getCloseAttributeCharacters(text, pos);
 
     // return all attributes for element if there is no current attribute or we are not inside the value portion of an attribute
-    if (!elementAttribute || !elementAttribute.isInsideValue) {
+    if (!element.isInsideAttributeValue) {
         return spec.getAttributes(element.name, openCharacters, closeCharacters);
     }
 
     // return valid values for attribute we are inside
-    return spec.getAttributeValues(element.name, elementAttribute.attributeName);
+    return spec.getAttributeValues(element.name, element.attributeName);
 }

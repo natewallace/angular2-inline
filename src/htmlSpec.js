@@ -1,3 +1,5 @@
+'use strict';
+
 const vscode = require('vscode');
 
 /** 
@@ -419,8 +421,9 @@ module.exports.getAttributes = function getAttributes(tagName, openCharacters, c
     const tag = module.exports.getTag(tagName);
     if (!tag) {
         result = globalAttributes;
+    } else {
+        result = tag.attributes.concat(globalAttributes);
     }
-    result = tag.attributes.concat(globalAttributes);
 
     let nameClose = '';
     let moveLeft = 0;
