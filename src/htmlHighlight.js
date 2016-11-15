@@ -64,7 +64,7 @@ function parseForElement(text, pos) {
                 const tokenText = scanner.getTokenText();
                 const tokenOffset = scanner.getTokenOffset();
                 const isHighlight = element.isHighlight || (pos >= tokenOffset && pos <= tokenOffset + tokenText.length);    
-                if (isHighlight && element.name === tokenText) {
+                if (isHighlight && (element.name === tokenText || tokenText === '>')) {
                     return {
                         openStart: element.offset,
                         openEnd: element.endOffset,
