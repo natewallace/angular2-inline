@@ -22,11 +22,24 @@ function parseForElement(text, pos) {
                 if (pos >= scanner.getTokenOffset() && pos <= scanner.getTokenOffset() + scanner.getTokenText().length) {
                     return {
                         name: scanner.getTokenText(),
+                        label: '<' + scanner.getTokenText() + '>',
                         offset: scanner.getTokenOffset(),
                         endOffset: scanner.getTokenOffset() + scanner.getTokenLength()
                     };
                 }
-                break;  
+                break;
+
+            // end tag
+            case Html.TokenType.EndTag:
+                if (pos >= scanner.getTokenOffset() && pos <= scanner.getTokenOffset() + scanner.getTokenText().length) {
+                    return {
+                        name: scanner.getTokenText(),
+                        label: '</' + scanner.getTokenText() + '>',
+                        offset: scanner.getTokenOffset(),
+                        endOffset: scanner.getTokenOffset() + scanner.getTokenLength()
+                    };
+                }
+                break;             
 
             // check for bail out
             default:
@@ -71,7 +84,7 @@ module.exports.createHover = function createCompletions(text, pos, textOffset, d
     const tag = spec.getTag(element.name);
     if (tag) {
         return new vscode.Hover(
-            [{ language: 'html', value: '<' + tag.label + '>' }, textToMarkedString(tag.documentation)],
+            [{ language: 'html', value: element.label }, textToMarkedString(tag.documentation)],
             new vscode.Range(document.positionAt(textOffset + element.offset), document.positionAt(textOffset + element.endOffset)));
     }
 
