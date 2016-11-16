@@ -29,6 +29,7 @@ module.exports = (function () {
             const text = document.getText();
             const pos = document.offsetAt(position);
             let match = null;
+            let resolved = false;
 
             while ((match = templateRegExp.exec(text)) !== null) {
                 if (pos > match.index + match[1].length && pos < match.index + match[0].length) {
@@ -37,8 +38,13 @@ module.exports = (function () {
                         pos - match[1].length - match.index, 
                         match.index + match[1].length,
                         document));
+                    resolved = true;
+                    break;
                 }
-                break;
+            }
+
+            if (!resolved) {
+                resolve([]);
             }
         });
     };
