@@ -88,6 +88,8 @@ function parseForElement(text, pos) {
                 elementStack.splice(elementStack.length - 1);
                 if (elementStack.length > 0) {
                     element = elementStack[elementStack.length - 1];
+                } else {
+                    element = null;
                 }
             }
         }
