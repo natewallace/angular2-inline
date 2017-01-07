@@ -1,7 +1,6 @@
 {
 	"fileTypes": [],
 	"injectionSelector": "L:meta.objectliteral",
-	"name": "object-member-ng-template",
 	"patterns": [
 		{
 			"include": "#object-member-ng-template"
@@ -10,7 +9,15 @@
 	"repository": {
 	
 		"object-member-ng-template": {
-			"begin": "template\\s*:",
+			"begin": "(template)\\s*(:)",
+			"beginCaptures": {
+				"1": {
+					"name": "meta.object.member.object-literal.key"
+				},
+				"2": {
+					"name": "punctuation.object-literal.key.separator.key-value"
+				}
+			},
 			"end": "(?=,|\\})",
 			"name": "meta.object.member",
 			"patterns": [
