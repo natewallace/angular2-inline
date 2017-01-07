@@ -317,7 +317,7 @@
 		},
 
 		"ng-tag-close": {
-			"begin": "(</)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))",
+			"begin": "(</)([_$a-zA-Z][-$\\w.:]*(?<!\\.|-))",
 			"beginCaptures": {
 				"1": {
 					"name": "punctuation.definition.tag.begin"
@@ -341,7 +341,7 @@
 		},
 
 		"ng-tag-open": {
-			"begin": "(?x)(<)([_$a-zA-Z][-$\\w.]*(?<!\\.|-))(?=\\s*(?!\\?)|/?>)",
+			"begin": "(?x)(<)([_$a-zA-Z][-$\\w.:]*(?<!\\.|-))(?=\\s*(?!\\?)|/?>)",
 			"beginCaptures": {
 				"1": {
 					"name": "punctuation.definition.tag.begin"
