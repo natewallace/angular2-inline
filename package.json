@@ -31,7 +31,10 @@
         "injectTo": [
           "source.js",
           "source.ts"
-        ]
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.html": "html"
+        }
       },
       {
         "scopeName": "styles.ng",
@@ -39,7 +42,10 @@
         "injectTo": [
           "source.js",
           "source.ts"
-        ]
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.css": "css"
+        }
       },
       {
         "scopeName": "source.ng.ts",
