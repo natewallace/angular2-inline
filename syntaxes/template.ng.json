@@ -44,6 +44,7 @@
 				}
 			},
 			"name": "meta.template",
+			"contentName": "meta.embedded.block.html",
 			"patterns": [
 				{
 					"include": "#template-substitution-element"

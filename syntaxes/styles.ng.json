@@ -58,6 +58,7 @@
 				}
 			},
 			"name": "meta.template",
+			"contentName": "meta.embedded.block.css",
 			"patterns": [
 				{
 					"include": "source.ng.css"
