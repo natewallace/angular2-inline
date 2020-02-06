@@ -1,5 +1,8 @@
 ## angular2-inline
 
+**This extension is no longer supported.**  
+All functionality that was provided by this extension can now be found in the Angular language service extension: https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
+
 *This extension replaces the language-vscode-javascript-angular2 extension.*
 
 This package is a language extension for Microsoft Visual Studio Code.  It extends the javascript and
